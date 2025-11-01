@@ -1,33 +1,50 @@
-import React from "react";
-import { useAuth } from "../context/AuthProvider";
+import React, { useEffect, useState } from "react";
+import { getModules, getTree, getProfile } from "../api/growmind"; // tambahkan getProfile
+import ModuleCard from "./ModuleCard";
+import TreeVisualizer from "./TreeVisualizer";
 import { useNavigate } from "react-router-dom";
 
 export default function Dashboard() {
-  const { user, logout } = useAuth();
+  const [modules, setModules] = useState([]);
+  const [tree, setTree] = useState(null);
+  const [profile, setProfile] = useState(null);
   const navigate = useNavigate();
 
-  if (!user) return <div>Loading...</div>;
+  useEffect(() => {
+    getModules().then(setModules);
+    getTree().then(setTree);
+    getProfile().then(setProfile); // ambil avatar
+  }, []);
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen bg-green-100">
-      <h1 className="mb-2 text-3xl font-bold">Welcome to GrowMind 🌱</h1>
-      <img src={user.avatar} alt="Avatar" className="w-20 h-20 mt-2 rounded-full" />
-      <p className="mt-2">Hello, {user.name}!</p>
-      <p className="text-gray-600">{user.email}</p>
+    <div className="p-6">
+      {/* Header dengan avatar */}
+      <div className="flex items-center justify-between mb-6">
+        <h1 className="text-3xl font-bold">Your GrowMind Dashboard</h1>
+<img
+  src={profile?.user?.avatar || "fallback.png"} // <-- pakai user.avatar
+  alt="Profile Avatar"
+  className="w-12 h-12 border-2 border-gray-300 rounded-full cursor-pointer"
+  onClick={() => navigate("/profile")}
+/>
 
-      <div className="flex gap-4 mt-6">
-        <button
-          onClick={() => navigate("/tree")}
-          className="px-4 py-2 text-white bg-green-600 rounded-lg hover:bg-green-700"
-        >
-          🌳 View Tree
-        </button>
-        <button
-          onClick={logout}
-          className="px-4 py-2 text-white bg-gray-500 rounded-lg hover:bg-gray-600"
-        >
-          Logout
-        </button>
+
+      </div>
+
+      {/* Tree visualizer */}
+      {tree && (
+        <TreeVisualizer
+          treeStage={tree.tree_stage}
+          level={tree.level}
+          exp={tree.exp}
+        />
+      )}
+
+      <h2 className="mt-6 mb-2 text-2xl">Modules</h2>
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+        {modules.map((mod) => (
+          <ModuleCard key={mod.id} module={mod} />
+        ))}
       </div>
     </div>
   );

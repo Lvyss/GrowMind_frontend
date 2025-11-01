@@ -5,40 +5,49 @@ const AuthContext = createContext();
 export const useAuth = () => useContext(AuthContext);
 
 export function AuthProvider({ children }) {
-  const [user, setUser] = useState(() => {
-    const saved = localStorage.getItem("user");
-    return saved ? JSON.parse(saved) : null;
-  });
+  const [user, setUser] = useState(null);
+  const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
+
   const token = localStorage.getItem("token");
 
-  useEffect(() => {
-    async function fetchUser() {
-      if (token && !user) {
-        try {
-          const data = await getMe(token);
-          setUser(data);
-          localStorage.setItem("user", JSON.stringify(data));
-        } catch (err) {
-          console.error("Failed to load user:", err);
-          localStorage.removeItem("token");
-          localStorage.removeItem("user");
-          setUser(null);
-        }
-      }
-      setLoading(false);
+  const fetchProfile = async () => {
+    if (!token) return;
+    try {
+      const data = await getMe();
+      setUser(data.user);
+      setProfile(data.profile);
+    } catch (err) {
+      console.error("Failed to fetch profile:", err);
+      setUser(null);
+      setProfile(null);
     }
-    fetchUser();
+  };
+
+  useEffect(() => {
+    const init = async () => {
+      setLoading(true);
+      if (token) await fetchProfile();
+      setLoading(false);
+    };
+    init();
   }, [token]);
+
+  const refreshProfile = async () => {
+    await fetchProfile();
+  };
 
   const logout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
     setUser(null);
+    setProfile(null);
   };
 
   return (
-    <AuthContext.Provider value={{ user, token, loading, logout }}>
+    <AuthContext.Provider
+      value={{ user, profile, token, refreshProfile, logout, loading }}
+    >
       {children}
     </AuthContext.Provider>
   );
