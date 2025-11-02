@@ -1,6 +1,5 @@
 import React from "react";
 import { useAuth } from "../context/AuthProvider";
-import TreeVisualizer from "./TreeVisualizer";
 
 export default function ProfilePage() {
   const { user, profile, logout, loading } = useAuth();
@@ -30,8 +29,7 @@ export default function ProfilePage() {
         </div>
       </div>
 
-      {/* Tree Visualizer */}
-      <TreeVisualizer treeStage={treeStage} level={level} exp={exp} />
+
 
       {/* Bio */}
       <div className="mt-6">

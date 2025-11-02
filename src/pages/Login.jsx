@@ -1,5 +1,5 @@
 import React from "react";
-import { loginWithGoogle } from "../api/auth";
+import { loginWithGoogle } from "../api/api";
 
 export default function Login() {
   return (
