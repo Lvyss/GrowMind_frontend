@@ -38,6 +38,9 @@ export const updateProfile = (data) => api.post("/profile", data).then(res => re
 // ==========================
 export const getUserModules = () => api.get("/modules").then(res => res.data);
 export const getUserModule = (slug) => api.get(`/modules/${slug}`).then(res => res.data);
+export const getModuleChallenges = (slug) => api.get(`/modules/${slug}/coding-challenges`).then(res => res.data);
+export const getChallenge = (id) => api.get(`/coding-challenges/${id}`).then(res => res.data);
+export const submitChallenge = (id, data) => api.post(`/coding-challenges/${id}/submit`, data).then(res => res.data);
 
 // ==========================
 // Admin Modules
@@ -48,7 +51,12 @@ export const createAdminModule = (data) => api.post("/admin/modules", data).then
 export const updateAdminModule = (slug, data) => api.put(`/admin/modules/${slug}`, data).then(res => res.data);
 export const deleteAdminModule = (slug) => api.delete(`/admin/modules/${slug}`).then(res => res.data);
 
-// ==========================
-// Default export
-// ==========================
+
+// Admin Coding Challenge CRUD
+export const getAdminChallenges = (slug) => api.get(`/admin/modules/${slug}/coding-challenges`).then(res => res.data);
+export const createAdminChallenge = (data) => api.post(`/admin/coding-challenges`, data).then(res => res.data);
+export const updateAdminChallenge = (id, data) => api.put(`/admin/coding-challenges/${id}`, data).then(res => res.data);
+export const deleteAdminChallenge = (id) => api.delete(`/admin/coding-challenges/${id}`).then(res => res.data);
+
+
 export default api;

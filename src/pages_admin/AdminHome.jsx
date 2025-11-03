@@ -56,26 +56,42 @@ export default function AdminHome() {
             <h3 className="text-lg font-semibold">{m.title}</h3>
             <p className="text-sm text-gray-500 capitalize">{m.status}</p>
 
-            <div className="flex gap-2 mt-4">
-              <button
-                className="px-2 py-1 text-xs text-white bg-gray-700 rounded"
-                onClick={() => navigate(`/admin/modules/${m.slug}`)}
-              >
-                Show
-              </button>
-              <button
-                className="px-2 py-1 text-xs text-white bg-blue-600 rounded"
-                onClick={() => navigate(`/admin/modules/${m.slug}/edit`)}
-              >
-                Edit
-              </button>
-              <button
-                className="px-2 py-1 text-xs text-white bg-red-600 rounded"
-                onClick={() => handleDelete(m.slug)}
-              >
-                Delete
-              </button>
-            </div>
+            <div className="flex flex-wrap gap-2 mt-4">
+
+  {/* Show Module */}
+  <button
+    className="px-2 py-1 text-xs text-white bg-gray-700 rounded"
+    onClick={() => navigate(`/admin/modules/${m.slug}`)}
+  >
+    Show
+  </button>
+
+  {/* Edit Module */}
+  <button
+    className="px-2 py-1 text-xs text-white bg-blue-600 rounded"
+    onClick={() => navigate(`/admin/modules/${m.slug}/edit`)}
+  >
+    Edit
+  </button>
+
+  {/* ➕ NEW: Manage Challenges */}
+<Link to={`/admin/modules/${m.id}/challenges`}>
+  <button className="px-2 py-1 text-xs text-white bg-purple-600 rounded">
+    Challenges
+  </button>
+</Link>
+
+
+  {/* Delete */}
+  <button
+    className="px-2 py-1 text-xs text-white bg-red-600 rounded"
+    onClick={() => handleDelete(m.slug)}
+  >
+    Delete
+  </button>
+
+</div>
+
           </div>
         ))}
 

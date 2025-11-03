@@ -29,12 +29,13 @@ export default function Dashboard() {
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-3xl font-bold">Your GrowMind Dashboard</h1>
-        <img
-          src={profile?.avatar || "fallback.png"}
-          alt="Profile Avatar"
-          className="w-12 h-12 border-2 border-gray-300 rounded-full cursor-pointer"
-          onClick={() => navigate("/profile")}
-        />
+<img 
+  src={profile?.user?.avatar || "/fallback.png"} 
+  alt="avatar"
+  className="w-12 h-12 border-2 border-gray-300 rounded-full cursor-pointer"
+  onClick={() => navigate("/profile")}
+/>
+
       </div>
 
       <h2 className="mb-4 text-2xl font-semibold">Modules</h2>

@@ -20,6 +20,11 @@ import ModuleEditAdmin from "./pages_admin/ModuleEditAdmin";
 import ModuleShowAdmin from "./pages_admin/ModuleShowAdmin";
 import AdminHome from "./pages_admin/AdminHome";
 
+// ADMIN CODING CHALLENGES (per module)
+import AdminModuleChallenges from "./pages_admin/AdminModuleChallenges";
+import AdminChallengeCreate from "./pages_admin/AdminChallengeCreate";
+import AdminChallengeEdit from "./pages_admin/AdminChallengeEdit";
+
 // ✅ Protected route with role check
 function ProtectedRoute({ children, role }) {
   const { user, token, loading } = useAuth();
@@ -77,6 +82,8 @@ export default function AppRoutes() {
           }
         />
 
+
+
         {/* Admin Routes */}
         <Route
           path="/admin"
@@ -110,6 +117,33 @@ export default function AppRoutes() {
             </ProtectedRoute>
           }
         />
+     <Route
+  path="/admin/modules/:moduleId/challenges"
+  element={
+    <ProtectedRoute role="admin">
+      <AdminModuleChallenges  />
+    </ProtectedRoute>
+  }
+/>
+
+<Route
+  path="/admin/modules/:moduleId/challenges/create"
+  element={
+    <ProtectedRoute role="admin">
+      <AdminChallengeCreate />
+    </ProtectedRoute>
+  }
+/>
+
+<Route
+  path="/admin/modules/:moduleId/challenges/:challengeId/edit"
+  element={
+    <ProtectedRoute role="admin">
+      <AdminChallengeEdit />
+    </ProtectedRoute>
+  }
+/>
+
 
         {/* Fallback */}
         <Route path="*" element={<Navigate to="/" replace />} />
