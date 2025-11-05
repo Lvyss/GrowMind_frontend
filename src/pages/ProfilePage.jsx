@@ -4,9 +4,17 @@ import { useAuth } from "../context/AuthProvider";
 export default function ProfilePage() {
   const { user, profile, logout, loading } = useAuth();
 
-  if (loading) return <p className="mt-10 text-center text-gray-500">Loading profile...</p>;
+  if (loading)
+    return (
+      <p className="mt-10 text-center text-gray-500">Loading profile...</p>
+    );
 
-  if (!user) return <p className="mt-10 text-center text-red-500">No user found. Please login again.</p>;
+  if (!user)
+    return (
+      <p className="mt-10 text-center text-red-500">
+        No user found. Please login again.
+      </p>
+    );
 
   // fallback values supaya TreeVisualizer nggak error
   const treeStage = profile?.tree_stage || 0;
@@ -28,8 +36,6 @@ export default function ProfilePage() {
           <p className="text-gray-500">Email: {user.email}</p>
         </div>
       </div>
-
-
 
       {/* Bio */}
       <div className="mt-6">

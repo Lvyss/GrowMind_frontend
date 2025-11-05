@@ -10,20 +10,28 @@ import { useAuth } from "./context/AuthProvider";
 // User pages
 import Login from "./pages/Login";
 import AuthCallback from "./pages/AuthCallback";
-import Dashboard from "./pages/Dashboard";
+
+// User Pages
+import UserHome from "./user/UserHome";
+import ModuleSections from "./user/ModuleSections";
+import SectionLearn from "./user/SectionLearn";
+
 import ProfilePage from "./pages/ProfilePage";
-import ModuleShow from "./pages/ModuleShow";
 
 // Admin pages
-import ModuleCreateAdmin from "./pages_admin/ModuleCreateAdmin";
-import ModuleEditAdmin from "./pages_admin/ModuleEditAdmin";
-import ModuleShowAdmin from "./pages_admin/ModuleShowAdmin";
-import AdminHome from "./pages_admin/AdminHome";
+import AdminDashboard from "./admin/AdminDashboard";
 
-// ADMIN CODING CHALLENGES (per module)
-import AdminModuleChallenges from "./pages_admin/AdminModuleChallenges";
-import AdminChallengeCreate from "./pages_admin/AdminChallengeCreate";
-import AdminChallengeEdit from "./pages_admin/AdminChallengeEdit";
+import ModuleListAdmin from "./admin/modules/ModuleListAdmin";
+import ModuleCreateAdmin from "./admin/modules/ModuleCreateAdmin";
+import ModuleEditAdmin from "./admin/modules/ModuleEditAdmin";
+
+import SectionCreateAdmin from "./admin/sections/SectionCreateAdmin";
+import SectionEditAdmin from "./admin/sections/SectionEditAdmin";
+import SectionListAdmin from "./admin/sections/SectionListAdmin";
+
+import QuestionListAdmin from "./admin/question/QuestionListAdmin";
+import QuestionCreateAdmin from "./admin/question/QuestionCreateAdmin";
+import QuestionEditAdmin from "./admin/question/QuestionEditAdmin";
 
 // ✅ Protected route with role check
 function ProtectedRoute({ children, role }) {
@@ -39,9 +47,7 @@ function ProtectedRoute({ children, role }) {
 
   if (!token || !user) return <Navigate to="/login" replace />;
 
-  // Jika ada role spesifik, cek role user
   if (role && user.role !== role) {
-    // bisa juga redirect ke halaman 403 atau default dashboard
     return <Navigate to={user.role === "admin" ? "/admin" : "/"} replace />;
   }
 
@@ -61,18 +67,29 @@ export default function AppRoutes() {
           path="/"
           element={
             <ProtectedRoute role="user">
-              <Dashboard />
+              <UserHome />
             </ProtectedRoute>
           }
         />
-                <Route
-          path="/modules/:slug"
+
+        <Route
+          path="/modules/:moduleId/sections"
           element={
             <ProtectedRoute role="user">
-              <ModuleShow />
+              <ModuleSections />
             </ProtectedRoute>
           }
         />
+
+        <Route
+          path="/modules/:moduleId/sections/:sectionId"
+          element={
+            <ProtectedRoute role="user">
+              <SectionLearn />
+            </ProtectedRoute>
+          }
+        />
+
         <Route
           path="/profile"
           element={
@@ -82,17 +99,25 @@ export default function AppRoutes() {
           }
         />
 
-
-
         {/* Admin Routes */}
         <Route
           path="/admin"
           element={
             <ProtectedRoute role="admin">
-              <AdminHome />
+              <AdminDashboard />
             </ProtectedRoute>
           }
         />
+
+        {/* Modules CRUD */}
+        {/* <Route
+          path="/admin/modules"
+          element={
+            <ProtectedRoute role="admin">
+              <ModuleListAdmin />
+            </ProtectedRoute>
+          }
+        /> */}
         <Route
           path="/admin/modules/create"
           element={
@@ -109,42 +134,58 @@ export default function AppRoutes() {
             </ProtectedRoute>
           }
         />
+
+        {/* Sections per Module */}
         <Route
-          path="/admin/modules/:slug"
+          path="/admin/modules/:slug/sectionslist"
           element={
             <ProtectedRoute role="admin">
-              <ModuleShowAdmin />
+              <SectionListAdmin />
             </ProtectedRoute>
           }
         />
-     <Route
-  path="/admin/modules/:moduleId/challenges"
-  element={
-    <ProtectedRoute role="admin">
-      <AdminModuleChallenges  />
-    </ProtectedRoute>
-  }
-/>
+        <Route
+          path="/admin/modules/:slug/sections/create"
+          element={
+            <ProtectedRoute role="admin">
+              <SectionCreateAdmin />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/modules/:slug/sections/:id/edit"
+          element={
+            <ProtectedRoute role="admin">
+              <SectionEditAdmin />
+            </ProtectedRoute>
+          }
+        />
 
-<Route
-  path="/admin/modules/:moduleId/challenges/create"
-  element={
-    <ProtectedRoute role="admin">
-      <AdminChallengeCreate />
-    </ProtectedRoute>
-  }
-/>
-
-<Route
-  path="/admin/modules/:moduleId/challenges/:challengeId/edit"
-  element={
-    <ProtectedRoute role="admin">
-      <AdminChallengeEdit />
-    </ProtectedRoute>
-  }
-/>
-
-
+        {/* Question per Section */}
+        <Route
+          path="/admin/sections/:id/questionslist"
+          element={
+            <ProtectedRoute role="admin">
+              <QuestionListAdmin />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/sections/:id/questions/create"
+          element={
+            <ProtectedRoute role="admin">
+              <QuestionCreateAdmin />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/sections/:id/questions/:id/edit"
+          element={
+            <ProtectedRoute role="admin">
+              <QuestionEditAdmin />
+            </ProtectedRoute>
+          }
+        />
         {/* Fallback */}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
